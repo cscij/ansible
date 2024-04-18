@@ -1,9 +1,16 @@
 ---
-- hosts: all
-
-  become: true
+- name: Update and upgrade apt packages
+  hosts: all 
   tasks:
-    - name: update yum packages
+    - name: Update packages with yum
+      when: ansible_pkg_mgr == 'yum'
       yum:
-        upgrade: yes
-        update_cache: yes
+        name: '*'
+        state: latest
+
+    - name: Upgrade packages with yum
+      when: ansible_pkg_mgr == 'yum'
+      yum:
+        name: '*'
+        state: latest
+        exclude: kernel*
